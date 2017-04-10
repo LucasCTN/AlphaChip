@@ -237,7 +237,7 @@ void chip8::emulateCycle()
 							 // VF is set to the value of the least significant bit of VX before the shift.        
 							 // Execute opcode
 				{
-					V[(opcode & 0x00F0) >> 4] = (0x000F & V[(opcode & 0x0F00) >> 8]);
+					V[0xF] = 0x000F & V[(opcode & 0x0F00) >> 8];
 					V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] >> 4;
 					pc += 2;
 					break;
