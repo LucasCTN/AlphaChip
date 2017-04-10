@@ -268,6 +268,16 @@ void chip8::emulateCycle()
 			}
 			break;
 		}
+		case 0x9000: // 9XY0: Skips the next instruction if VX doesn't equal VY. 
+					 // (Usually the next instruction is a jump to skip a code block)
+					 // Execute opcode
+		{
+			if (V[(opcode & 0x0F00) >> 8] != V[(opcode & 0x00F0) >> 4])
+				pc += 4;
+			else
+				pc += 2;
+			break;
+		}
 		case 0xC000: // CXNN: Sets VX to the result of a bitwise and operation on a random number 
 					 // (Typically: 0 to 255) and NN.
 					 // Execute opcode
