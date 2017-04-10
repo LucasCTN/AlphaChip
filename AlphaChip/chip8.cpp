@@ -254,6 +254,15 @@ void chip8::emulateCycle()
 					pc += 2;
 					break;
 				}
+				case 0x000E: // 0x8XYE: Shifts VX left by one. 
+							 // VF is set to the value of the most significant bit of VX before the shift. 
+							 // Execute opcode
+				{
+					V[0xF] = V[(opcode & 0x0F00) >> 8] & 0xF000;
+					V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] << 4;
+					pc += 2;
+					break;
+				}
 				default:
 					printf("Unknown opcode [0x0000]: 0x%X\n", opcode);
 			}
