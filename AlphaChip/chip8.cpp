@@ -242,6 +242,18 @@ void chip8::emulateCycle()
 					pc += 2;
 					break;
 				}
+				case 0x0007: // 0x8XY7: Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't. 
+							 // Execute opcode
+				{
+					if (V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4])
+						V[0xF] = 0;
+					else
+						V[0xF] = 1;
+
+					V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] - V[(opcode & 0x0F00) >> 8];
+					pc += 2;
+					break;
+				}
 				default:
 					printf("Unknown opcode [0x0000]: 0x%X\n", opcode);
 			}
