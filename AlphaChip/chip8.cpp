@@ -182,6 +182,14 @@ void chip8::emulateCycle()
 					pc += 2;
 					break;
 				}
+				case 0x0001: // 0x8XY1: Sets VX to VX or VY. (Bitwise OR operation) VF is reset to 0.        
+							 // Execute opcode
+				{
+					V[(opcode & 0x0F00) >> 8] = (V[(opcode & 0x0F00) >> 8] || V[(opcode & 0x00F0) >> 4]);
+					V[0xF] = 0;
+					pc += 2;
+					break;
+				}
 				case 0x0002: // 0x8XY2: Sets VX to VX and VY. (Bitwise AND operation) VF is reset to 0.        
 							 // Execute opcode
 				{
