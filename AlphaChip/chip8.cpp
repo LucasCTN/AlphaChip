@@ -147,6 +147,16 @@ void chip8::emulateCycle()
 				pc += 2;
 			break;
 		}
+		case 0x5000:	// 5XY0: Skips the next instruction if VX equals VY.
+						// (Usually the next instruction is a jump to skip a code block)
+						// Execute opcode
+		{
+			if (V[(opcode & 0x0F00) >> 8] == V[(opcode & 0x00F0) >> 4])
+				pc += 4;
+			else
+				pc += 2;
+			break;
+		}
 		case 0x6000: // 6XNN: Sets VX to NN.
 					 // Execute opcode
 		{
@@ -401,8 +411,6 @@ void chip8::loadGame(std::string new_filename)
 	FILE *fileptr;
 	char *buffer;
 	long filelen;
-
-	std::cout << new_filename.c_str() << std::endl;
 
 	fileptr = fopen(new_filename.c_str(), "rb");	// Open the file in binary mode
 	fseek(fileptr, 0, SEEK_END);					// Jump to the end of the file
