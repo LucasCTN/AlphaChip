@@ -199,6 +199,15 @@ void chip8::emulateCycle()
 					pc += 2;
 					break;
 				}
+				case 0x0003: // 0x8XY3: Sets VX to VX xor VY. VF is reset to 0.        
+							 // Execute opcode
+				{
+					V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] ^ V[(opcode & 0x00F0) >> 4];
+					V[0xF] = 0;
+
+					pc += 2;
+					break;
+				}
 				case 0x0004: // 0x8XY4: Sets VX to the value of VY.        
 							 // Execute opcode
 				{
