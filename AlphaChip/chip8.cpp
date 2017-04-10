@@ -278,14 +278,6 @@ void chip8::emulateCycle()
 				pc += 2;
 			break;
 		}
-		case 0xC000: // CXNN: Sets VX to the result of a bitwise and operation on a random number 
-					 // (Typically: 0 to 255) and NN.
-					 // Execute opcode
-		{
-			V[(opcode & 0x0F00) >> 8] += ((rand() % 0xFF) & (opcode & 0x00FF));
-			pc += 2;
-			break;
-		}
 		case 0xA000: // ANNN: Sets I to the address NNN
 					 // Execute opcode
 		{
@@ -297,6 +289,14 @@ void chip8::emulateCycle()
 					 // Execute opcode
 		{
 			pc = (opcode & 0x0FFF) + V[0x0];
+			break;
+		}
+		case 0xC000: // CXNN: Sets VX to the result of a bitwise and operation on a random number 
+					 // (Typically: 0 to 255) and NN.
+					 // Execute opcode
+		{
+			V[(opcode & 0x0F00) >> 8] += ((rand() % 0xFF) & (opcode & 0x00FF));
+			pc += 2;
 			break;
 		}
 		case 0xD000: // DXYN: Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and a height of N pixels.
@@ -363,6 +363,27 @@ void chip8::emulateCycle()
 		{
 			switch (opcode & 0x000F)
 			{
+				case 0x000A: // 0xFX0A: A key press is awaited, and then stored in VX. 					
+							 // (Blocking Operation. All instruction halted until next key event)
+							 // Execute opcode
+				{
+					bool keyPressed = false;
+
+					for (int i = 0; i < 16; i++)
+					{
+						if (key[i] != 0)
+						{
+							keyPressed = true;
+							V[(opcode & 0x0F00) >> 8] = i;
+						}
+					}
+
+					if (keyPressed == true)
+						pc += 2;
+					else
+						return;
+					break;
+				}
 				case 0x0003: // 0xFX33: Stores the Binary-coded decimal representation of VX at the addresses I,
 							 //											I plus 1, and I plus 2.
 							 // Execute opcode
