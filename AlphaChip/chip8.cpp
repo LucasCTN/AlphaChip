@@ -293,6 +293,12 @@ void chip8::emulateCycle()
 			pc += 2;
 			break;
 		}
+		case 0xB000: // BNNN: Jumps to the address NNN plus V0.
+					 // Execute opcode
+		{
+			pc = (opcode & 0x0FFF) + V[0x0];
+			break;
+		}
 		case 0xD000: // DXYN: Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and a height of N pixels.
 					 // Execute opcode
 		{
