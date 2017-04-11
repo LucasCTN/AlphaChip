@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
 	setupInput();
 
 	emulator.initialize();
-	emulator.loadGame("C:\\chip8-roms\\PONG");
+	emulator.loadGame("C:\\chip8-roms\\pong");
 
 	
 	while (!quit)
@@ -50,6 +50,7 @@ int main(int argc, char ** argv)
 
 		if (emulator.drawFlag)
 		{
+			//emulator.debugDraw();
 			for (int i = 0; i < 64 * 32; i++)
 			{
 				if(emulator.gfx[i] == 1)
@@ -126,6 +127,9 @@ int main(int argc, char ** argv)
 				break;
 			case SDLK_v:
 				emulator.key[0xF] = 1;
+				break;
+			case SDLK_ESCAPE:
+				quit = true;
 				break;
 			default:
 				break;
